@@ -2,13 +2,6 @@
 from html import escape
 from pathlib import Path
 
-REPO = "https://github.com/EdwinY23/heart-disease-mlops"
-
-
-def link(path, label=None):
-    return f'<a href="{REPO}/blob/main/{path}" target="_blank" rel="noopener">{escape(label or path)} ↗</a>'
-
-
 def make_site(payload, table):
     # Solo representa métricas medidas; no rellena resultados con datos sintéticos.
     d = payload["descripcion"]
@@ -57,25 +50,25 @@ footer{padding:22px;text-align:center;color:#5b7783;font-size:13px}
 <div class="note"><strong>Advertencia:</strong> Este trabajo es exclusivamente académico. Las puntuaciones no son diagnóstico, riesgo clínico calibrado ni herramienta para decisiones médicas.</div></section>
 <section id="etapa0"><div class="kicker">Etapa 0</div><h2>Estructura modular y trazabilidad</h2>
 <p>El repositorio diferencia datos y preprocesamiento (<code>src/</code>), experimentos (<code>notebooks/</code>), entrenamiento (<code>scripts/</code>), API (<code>app/</code>), infraestructura (<code>docker/</code> y <code>k8s/</code>), pruebas (<code>tests/</code>) y automatización (<code>.github/workflows/</code>).</p>
-<div class="files">{F0}</div></section>
+</section>
 <section id="etapa1"><div class="kicker">Etapa 1</div><h2>Análisis exploratorio y auditoría de fuga de datos</h2>
 <p>Se revisan clases, edades, duplicados, ausencias y ceros físicamente implausibles: <strong>{BP} registros</strong> con presión de reposo nula y <strong>{CHOL}</strong> con colesterol nulo. Se convierten a <code>NaN</code> y se imputan dentro de los pliegues de entrenamiento.</p>
 <div class="visuals"><img src="assets/distribucion_clases.png" alt="Distribución de clases del dataset"><img src="assets/edad_clases.png" alt="Histograma de edades según HeartDisease"></div>
 <h3>Prueba didáctica de data leakage</h3><p>Se comparan dos procedimientos sobre las <strong>mismas observaciones reales</strong>: uno incorrecto, que ajusta el preprocesamiento antes de dividir los datos, y otro correcto, que lo ajusta solo en entrenamiento. Una AUC mayor no está garantizada: lo importante es evitar consultar el conjunto de prueba durante el ajuste.</p>
 <div class="metrics"><div class="metric"><b>{AUC_BAD}</b>AUC con fuga de preprocesamiento</div><div class="metric"><b>{AUC_GOOD}</b>AUC sin fuga en la demostración</div></div>
-<p>{F1}</p></section>
+</section>
 <section id="etapa2"><div class="kicker">Etapa 2</div><h2>Entrenamiento seguro y selección por validación cruzada</h2>
 <p>División estratificada 80/20 con <code>random_state=42</code>. El preprocesamiento numérico y categórico se ajusta dentro de <code>Pipeline</code>; <code>GridSearchCV</code> utiliza cinco folds estratificados y optimiza ROC AUC. Se comparan SVC, Logistic Regression, Random Forest, KNN y Gradient Boosting. La selección se realiza por <strong>AUC media de CV</strong>, no por la prueba reservada.</p>
 <div class="scroller"><table><thead><tr><th>Clasificador</th><th>AUC CV</th><th>AUC prueba</th><th>Accuracy prueba</th><th>TP</th><th>FN</th></tr></thead><tbody>{ROWS}</tbody></table></div>
 <p>Modelo seleccionado: <strong>{WINNER}</strong> · AUC CV <strong>{WINNER_CV}</strong> · AUC prueba <strong>{WINNER_AUC}</strong> · Accuracy en prueba <strong>{WINNER_ACC}</strong>.</p>
 <div class="visuals"><img src="assets/roc_modelo.png" alt="Curva ROC del modelo seleccionado"><img src="assets/matriz_confusion.png" alt="Matriz de confusión sobre la prueba reservada"></div>
-<p>La AUC resume capacidad discriminatoria y Accuracy depende del umbral de 0,5 y de las clases observadas; ninguna es por sí sola una medida de calibración clínica. {F2}</p></section>
+<p>La AUC resume capacidad discriminatoria y Accuracy depende del umbral de 0,5 y de las clases observadas; ninguna es por sí sola una medida de calibración clínica.</p></section>
 <section id="etapa3"><div class="kicker">Etapa 3</div><h2>Despliegue: FastAPI + Docker</h2>
 <p>Se implementó un servicio REST con esquemas Pydantic: <code>GET /health</code>, <code>GET /model-info</code>, <code>POST /predict</code>. El archivo del modelo se produce con <code>joblib</code> durante el entrenamiento. Docker encapsula la aplicación y sus dependencias.</p>
 <pre><code>docker build -t heart-mlops:local -f docker/Dockerfile .
 docker run --rm -p 8000:8000 heart-mlops:local
 # Documentación de la API: http://localhost:8000/docs</code></pre>
-<p>{F3}</p><div class="note">GitHub Pages es un sitio estático: <strong>no mantiene una API FastAPI ejecutándose</strong>. Para predicciones se requiere ejecutar la imagen Docker localmente o desplegarla en un servidor.</div></section>
+<div class="note">GitHub Pages es un sitio estático: <strong>no mantiene una API FastAPI ejecutándose</strong>. Para predicciones se requiere ejecutar la imagen Docker localmente o desplegarla en un servidor.</div></section>
 <section id="etapa4"><div class="kicker">Etapa 4</div><h2>Orquestación con Kubernetes (Minikube)</h2>
 <p>Los manifiestos definen un <code>Deployment</code> con readiness probe y límites de recursos y un <code>Service</code> tipo <code>ClusterIP</code>. El modelo puede desplegarse localmente después de generar la imagen.</p>
 <pre><code>minikube start
@@ -83,31 +76,18 @@ minikube image load heart-mlops:local
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl port-forward service/heart-service 8000:80</code></pre>
-<p>{F4}</p><div class="note">Manifiestos e instrucciones entregados; <strong>no se afirma un clúster Minikube funcionando en producción</strong> sin evidencia de ejecución.</div></section>
+<div class="note">Manifiestos e instrucciones entregados; <strong>no se afirma un clúster Minikube funcionando en producción</strong> sin evidencia de ejecución.</div></section>
 <section id="etapa5"><div class="kicker">Etapa 5</div><h2>Integración y publicación continuas — GitHub Actions</h2>
 <p>El repositorio incluye validación automática de estilo mediante Ruff, pruebas con pytest y un workflow de construcción del sitio que entrena con datos reales, genera evidencias, revisa el servicio en Docker y publica el contenido en <code>gh-pages</code>. Consultar la ejecución y sus registros desde Actions.</p>
-<p>{F5} · <a href="{REPO}/actions">Ver ejecuciones y resultados de CI/CD ↗</a></p></section>
+</section>
 <section id="etapa6"><div class="kicker">Etapa 6</div><h2>Monitoreo de deriva mediante Evidently</h2>
 <p>Evidently compara las covariables reales de entrenamiento y prueba del dataset de Kaggle, sin modificar valores ni incorporar registros. La comparación es retrospectiva y <strong>no representa tráfico real de una API en producción</strong>.</p>
-<p><a href="drift_report.html">Abrir el informe de Evidently ↗</a> · {F6}</p></section>
+<p><a href="drift_report.html">Abrir el informe de Evidently ↗</a></p></section>
 <section id="conclusiones"><div class="kicker">Discusión</div><h2>Conclusiones, límites y fuentes</h2>
 <p>El flujo constituye una demostración reproducible de prácticas MLOps, desde la auditoría de fuga hasta la automatización de una web académica. La partición única de datos históricos no equivale a validación externa; es necesario estudiar calibración, origen de los hospitales, deriva real y sesgos antes de cualquier uso clínico. La API, Docker, Kubernetes y Evidently son componentes de ingeniería verificables de manera separada.</p>
 <p class="small">Datos: <a href="https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction">fedesoriano — Heart Failure Prediction</a>. Marco técnico: <a href="https://scikit-learn.org/stable/modules/compose.html">scikit-learn</a>, <a href="https://fastapi.tiangolo.com/">FastAPI</a>, <a href="https://docs.docker.com/">Docker</a>, <a href="https://kubernetes.io/docs/home/">Kubernetes</a>, <a href="https://docs.evidentlyai.com/">Evidently</a>.</p>
-<p>{FREAD}</p></section>
+</section>
 </main><footer>Edwin Yunis y Jairo Serrano · Machine Learning · Maestría en Ingeniería Industrial</footer></body></html>'''
-    files = {
-        "F0": ["README.md", "src/data.py", "src/modeling.py", "notebooks/1_model_leakage_demo.ipynb", "notebooks/2_model_pipeline_cv.ipynb"],
-        "F1": ["src/leakage.py", "notebooks/1_model_leakage_demo.ipynb"],
-        "F2": ["src/modeling.py", "notebooks/2_model_pipeline_cv.ipynb", "scripts/train.py"],
-        "F3": ["app/api.py", "docker/Dockerfile", "docker/requirements.txt", "tests/test_api.py"],
-        "F4": ["k8s/deployment.yaml", "k8s/service.yaml"],
-        "F5": [".github/workflows/entrega-mlops.yml", ".github/workflows/entrega-mlops.yml", "tests/test_modeling.py"],
-        "F6": ["scripts/drift.py", "requirements-monitor.txt"],
-        "FREAD": ["README.md", "reportes/INFORME_FINAL.md"],
-    }
-    for key, paths in files.items():
-        items = ' '.join(link(path) for path in paths)
-        template = template.replace('{'+key+'}', items if key == 'F0' else items)
     replacements = {
         "N":d['n_registros'], "P":d['n_variables'], "PREV":f"{100*d['prevalencia_observada']:.1f}%",
         "DUP":d['duplicados_completos'], "BP":d['restingbp_cero'], "CHOL":d['cholesterol_cero'],
@@ -115,7 +95,6 @@ kubectl port-forward service/heart-service 8000:80</code></pre>
         "AUC_GOOD":f"{leak['AUC_sin_fuga']:.3f}", "ROWS":rows,
         "WINNER":escape(str(best.modelo)), "WINNER_CV":f"{best.AUC_CV:.3f}",
         "WINNER_AUC":f"{best.AUC_test:.3f}", "WINNER_ACC":f"{best.Accuracy_test:.3f}",
-        "REPO":REPO,
     }
     for key,value in replacements.items():
         template=template.replace('{'+key+'}',str(value))
