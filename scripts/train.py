@@ -10,6 +10,7 @@ from src.data import DATASET_ORIGINAL, describe_data, load_data
 from src.leakage import compare_leakage
 from src.modeling import SEED, fit_all
 from src.site import make_site
+from src.dashboard_site import render_dashboard
 
 
 def main():
@@ -77,6 +78,8 @@ def main():
     fig.savefig("docs/assets/matriz_confusion.png", dpi=150)
     plt.close(fig)
     make_site(payload, table)
+    Path('docs/index.html').replace('docs/informe_tecnico.html')
+    render_dashboard(dataset, table, results, payload)
     write_academic_report(payload, table)
     print("\nResultados calculados sobre el dataset cargado:")
     print(table[["modelo", "AUC_CV", "AUC_test", "Accuracy_test"]].to_string(index=False))
