@@ -1,0 +1,36 @@
+PROYECTO INTEGRADOR DE APRENDIZAJE AUTOMATICO - MLOps
+Edwin Yunis y Jairo Serrano
+Maestria en Ingenieria Industrial - Machine Learning - Dr. Lihki Rubio
+
+1) Si NO tienes Python instalado, entra a https://colab.research.google.com/
+2) En Colab: Archivo > Subir cuaderno, selecciona Abrir_en_Colab.ipynb
+   (el cuaderno se encuentra dentro de este ZIP; extraelo primero).
+3) Ejecuta sus celdas en orden. En la primera, sube EL ZIP COMPLETO del proyecto.
+4) Espera a que se descarguen los datos reales (918 registros) y se entrenen
+   los cinco clasificadores. NO uses muestras sinteticas para calcular resultados.
+5) Colab generara automaticamente las tablas, graficas, informe final, modelo,
+   web sin codigo y un ZIP con resultados reales para entregar.
+6) Si deseas compartir enlace GitHub Pages, crea un repositorio PUBLICO NUEVO
+   (p.ej. proyecto-mlops-cardiaco), activa PUBLICAR_GITHUB=True en la ultima celda
+   opcional del Colab y otorga Contents: Read and write al token.
+   En GitHub Pages usa rama main, carpeta /docs.
+
+Contenido de la entrega:
+- notebooks/1_model_leakage_demo.ipynb: fuga de informacion intencional
+- notebooks/2_model_pipeline_cv.ipynb: cinco clasificadores, CV, ROC y ranking
+- src/: procesos reutilizables sin leakage
+- app/api.py: FastAPI con esquema de validacion
+- docker/: Dockerfile y dependencias consistentes
+- k8s/: Deployment + Service para Minikube
+- .github/workflows/ci.yml: tests y lint
+- scripts/drift.py: reporte Evidently con particiones originales sin alterar
+- README.md: explicacion academica detallada, limitaciones y fuentes
+- docs/index.html: SE GENERA SOLO al entrenar con datos reales
+- reportes/INFORME_FINAL.md: SE GENERA SOLO al entrenar con datos reales
+
+AVISO DE HONESTIDAD ACADEMICA:
+Los archivos de resultado/modelo NO estan calculados dentro del ZIP inicial,
+porque aqui no hubo acceso a la fuente externa de Kaggle. Se generan con los
+918 registros reales ejecutando el cuaderno Colab.
+
+El proyecto NO es un instrumento de diagnostico medico.
