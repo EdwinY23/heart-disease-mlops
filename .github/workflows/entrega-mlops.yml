@@ -1,0 +1,78 @@
+name: Construir y publicar entrega MLOps
+on:
+  push:
+    paths:
+      - Proyecto_MLOps_Yunis_Serrano_SOLO_DATOS_PROFESOR.zip
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  entrega:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Integrar archivos originales del proyecto
+        run: python scripts/bootstrap_repo.py
+      - name: Publicar los archivos fuente en main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "Incorporar proyecto de Edwin Yunis y Jairo Serrano"
+            git push origin HEAD:main
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Instalar dependencias y comprobar calidad
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-monitor.txt ruff
+          ruff check app src scripts tests
+      - name: Verificar dataset oficial de Kaggle
+        run: python -c "from src.data import load_data; d=load_data(); assert len(d)==918; print('Kaggle verificado:',len(d))"
+      - name: Pruebas reales con pytest
+        run: pytest -q
+      - name: Entrenar cinco modelos y generar HTML
+        run: python -m scripts.train
+      - name: Analizar deriva retrospectiva sin datos artificiales
+        run: |
+          python -m scripts.drift
+          cp reportes/drift_report.html docs/drift_report.html
+      - name: Construir y probar servicio en Docker
+        run: |
+          docker build -t heart-mlops:ci -f docker/Dockerfile .
+          docker run -d --name heart-ci -p 8000:8000 heart-mlops:ci
+          python - <<'PY'
+          import time, json, urllib.request
+          for i in range(30):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3) as r:
+                      assert json.load(r)['status'] == 'ready'
+                  break
+              except Exception:
+                  if i == 29: raise
+                  time.sleep(2)
+          print("FastAPI en Docker verificada")
+          PY
+          docker rm -f heart-ci
+      - name: Guardar evidencias de los resultados
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-modelo-y-monitoreo
+          path: |
+            reportes/
+            artifacts/model.joblib
+            docs/
+      - name: Publicar sitio académico en gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          enable_jekyll: false
