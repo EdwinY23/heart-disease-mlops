@@ -1,5 +1,4 @@
 """Esquema y transformaciones verificadas sobre datos reales."""
-import pandas as pd
 import pytest
 from src.data import prepare_features, validate_schema
 from src.modeling import split_data
