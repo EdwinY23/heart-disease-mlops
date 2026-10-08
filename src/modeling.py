@@ -37,15 +37,17 @@ def model_specs():
         }),
         "LogisticRegression": (
             LogisticRegression(max_iter=2000, random_state=SEED),
-            {"clf__C": [0.1, 1, 10]},
+            {"clf__C": [0.05, 0.2, 1]},
         ),
         "RandomForest": (
             RandomForestClassifier(random_state=SEED, n_jobs=1),
-            {"clf__n_estimators": [100, 200], "clf__max_depth": [5, None]},
+            {"clf__n_estimators": [100, 180], "clf__max_depth": [5, 9],
+             "clf__min_samples_leaf": [2, 4]},
         ),
         "KNN": (
             KNeighborsClassifier(),
-            {"clf__n_neighbors": [3, 5, 9], "clf__weights": ["uniform", "distance"]},
+            {"clf__n_neighbors": [9, 15, 21],
+             "clf__weights": ["uniform", "distance"]},
         ),
         "GradientBoosting": (
             GradientBoostingClassifier(random_state=SEED),
