@@ -26,6 +26,26 @@
 
 El reporte Evidently compara sin alteraciones el subconjunto de entrenamiento con el subconjunto de prueba. **No se fabrican registros, no se simula cambio de edades y no se afirma monitoreo productivo.**
 
+## Dashboard de tres vistas: Dash + Plotly
+
+**Contexto:** presenta el problema clínico, objetivo binario, procedencia del dataset, 918 registros, variables y las etapas MLOps.
+
+**EDA:** presenta gráficas interactivas sobre el CSV original: balance de clases, distribución por edad, colesterol válido por clase, dolor torácico y matriz de correlaciones; documenta las observaciones de ceros inverosímiles.
+
+**Models:** compara **KNN, Random Forest y regresión logística**, usando la misma división de prueba que los demás clasificadores. La selección de hiperparámetros utiliza `Pipeline` y `GridSearchCV` estratificada con 5 folds. Se restringen parámetros de complejidad para **reducir**, sin prometer eliminar, sobreajuste. Se reportan AUC CV, AUC prueba, Accuracy, brecha AUC entrenamiento−CV, curvas ROC y matrices de confusión de cada candidato.
+
+Para ejecutar la aplicación real Dash (servidor interactivo):
+
+```bash
+python -m pip install -r requirements.txt
+python -m scripts.train
+python -m dashboard.app
+```
+
+Abrir **http://localhost:8050**. La API FastAPI se sirve por separado en el puerto 8000.
+
+**Versión de GitHub Pages:** `https://edwiny23.github.io/heart-disease-mlops/`. Es una presentación HTML interactiva de Plotly con las mismas tres ventanas, **no un servidor Dash**. GitHub Pages solo sirve contenido estático, mientras la aplicación Dash real se ejecuta localmente. El entrenamiento genera `reportes/modelos_dashboard.json` y `docs/index.html` con resultados medidos. La imagen cardiovascular del encabezado es una ilustración, no un registro médico.
+
 ## Ejecutar el proyecto
 
 ```bash
