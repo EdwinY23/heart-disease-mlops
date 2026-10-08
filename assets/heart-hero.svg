@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" role="img" aria-label="Ilustración anatómica estilizada de un corazón con trazo electrocardiográfico">
+<defs>
+  <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#09283f"/><stop offset="1" stop-color="#174d66"/></linearGradient>
+  <linearGradient id="heart" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff8b94"/><stop offset=".56" stop-color="#ed526f"/><stop offset="1" stop-color="#ac3058"/></linearGradient>
+  <linearGradient id="pulse" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#4fe0e6" stop-opacity=".1"/><stop offset=".42" stop-color="#71eaff"/><stop offset="1" stop-color="#64ddfe" stop-opacity=".2"/></linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="12"/></filter>
+  <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="17" flood-color="#000" flood-opacity=".27"/></filter>
+</defs>
+<rect width="820" height="500" rx="28" fill="url(#bg)"/>
+<g opacity=".16" stroke="#5cbbd8" stroke-width="1"><path d="M0 60H820M0 120H820M0 180H820M0 240H820M0 300H820M0 360H820M0 420H820M60 0V500M120 0V500M180 0V500M240 0V500M300 0V500M360 0V500M420 0V500M480 0V500M540 0V500M600 0V500M660 0V500M720 0V500M780 0V500"/></g>
+<circle cx="540" cy="225" r="205" fill="#37c3e0" opacity=".09"/><circle cx="540" cy="225" r="157" fill="#65e0ef" opacity=".08"/>
+<g filter="url(#shadow)" transform="translate(350,45)">
+  <path d="M199 108C173 78 116 72 82 101C34 144 56 211 103 257L202 358L301 257C348 211 370 144 322 101C289 70 230 78 199 108Z" fill="url(#heart)" stroke="#ffbcc2" stroke-width="5"/>
+  <path d="M202 125C170 101 124 103 105 126" stroke="#ffd6db" stroke-width="11" opacity=".55" fill="none" stroke-linecap="round"/>
+  <path d="M203 337V138" stroke="#6c1939" opacity=".22" stroke-width="6"/>
+  <path d="M190 106C176 56 191 32 199 10M236 113C258 61 259 26 251 9M278 133C323 94 348 91 369 81" stroke="#ed6e85" stroke-width="20" fill="none" stroke-linecap="round" opacity=".85"/>
+  <path d="M190 98C178 70 189 43 196 18M237 103C252 65 253 34 249 17" stroke="#ffbcc2" stroke-width="4" fill="none" opacity=".7"/>
+  <path d="M92 178C157 152 172 171 201 190M269 225C293 193 309 185 335 179" fill="none" stroke="#ac2b52" stroke-width="9" opacity=".4"/>
+</g>
+<path d="M38 291H178l27-35 23 72 40-157 37 123h85l28-25 15 23h83l29-45 34 108 27-63h165" fill="none" stroke="#3ce5f5" stroke-width="16" opacity=".30" filter="url(#glow)"/>
+<path d="M38 291H178l27-35 23 72 40-157 37 123h85l28-25 15 23h83l29-45 34 108 27-63h165" fill="none" stroke="url(#pulse)" stroke-linejoin="round" stroke-linecap="round" stroke-width="5"/>
+<g fill="#9be5f0" opacity=".8"><circle cx="119" cy="96" r="5"/><circle cx="711" cy="397" r="7"/><circle cx="92" cy="410" r="3"/></g>
+</svg>
