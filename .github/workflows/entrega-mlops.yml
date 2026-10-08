@@ -43,6 +43,8 @@ jobs:
         run: pytest -q
       - name: Entrenar cinco modelos y generar HTML
         run: python -m scripts.train
+      - name: Verificar la aplicación Dash de tres ventanas
+        run: python -c "from dashboard.app import app; tabs = app.layout.children[1].children[1]; assert len(tabs.children) == 3; print('Dash con tres pestañas verificado')"
       - name: Analizar deriva retrospectiva sin datos artificiales
         run: |
           python -m scripts.drift
