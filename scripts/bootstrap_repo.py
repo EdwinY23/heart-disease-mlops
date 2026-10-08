@@ -2,8 +2,12 @@
 from pathlib import Path
 from zipfile import ZipFile
 import shutil
+import sys
 
 archives = sorted(Path(".").glob("Proyecto_MLOps_Yunis_Serrano_SOLO_DATOS_PROFESOR*.zip"))
+if not archives and Path("src/data.py").exists() and Path("scripts/train.py").exists():
+    print("Fuentes ya integradas: se conserva el proyecto sin volver a extraer ZIP.")
+    sys.exit(0)
 if len(archives) != 1:
     raise SystemExit(
         "Se esperaba exactamente un ZIP de entrega; encontrados: "
