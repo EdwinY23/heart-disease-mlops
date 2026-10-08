@@ -14,6 +14,6 @@ def test_kubernetes_manifests():
 
 
 def test_workflows_and_docker_files_exist():
-    for name in ["docker/Dockerfile", ".github/workflows/ci.yml",
-                 ".github/workflows/publicar-informe.yml", "scripts/drift.py"]:
+    for name in ["docker/Dockerfile", ".github/workflows/entrega-mlops.yml",
+                 "scripts/drift.py"]:
         assert Path(name).is_file(), name
