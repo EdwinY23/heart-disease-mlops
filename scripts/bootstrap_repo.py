@@ -38,8 +38,6 @@ try:
         if not item.is_file():
             continue
         relative = item.relative_to(project)
-        if relative.parts[:2] == (".github", "workflows"):
-            continue  # Conserva el workflow del repositorio.
         destination = Path(relative)
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(item, destination)
